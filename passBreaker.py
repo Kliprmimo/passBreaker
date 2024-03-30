@@ -1,7 +1,9 @@
 from pwn import *  # type: ignore  
 
-with log.progress('Trying something...') as p:
-    for i in range(10):
-        p.status("At %i" % i)
-        time.sleep(0.5)
-    x = 1/0
+def check_env():
+    if not term.can_init():
+        print('try using linux env, logging might not look great because term could not be enabled ')
+        exit()
+
+if __name__ == '__main__':
+    check_env()
