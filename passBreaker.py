@@ -1,3 +1,5 @@
+# to_do make it so that logging actually looks cool
+
 from pwn import *  # type: ignore  
 import argparse
 import itertools
@@ -17,7 +19,7 @@ def bruteforce_pass_lc(max_length, hashe, mode, logger_inst):
             for pass_candidate in itertools.product(alphabet_lc, repeat=(curr_len+1)):
                 pass_candidate = str(''.join(pass_candidate))
                 current_hashe = sha256sumhex(pass_candidate.encode()) # type: ignore  
-                logger_inst.status(current_hashe)
+                # logger_inst.status(current_hashe) # enabling this option slows down breaking hashes to painfull degree
                 if current_hashe == hashe:
                     logger_inst.success('Found hash! Password is: ' + pass_candidate)
                     return pass_candidate
@@ -29,10 +31,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if not args.no_env_check:
         check_env()
+
     log.info('Starting hashe checking')
-    logger = log.progress('Current hashe')
+    # logger = log.progress('Current hashe')
+    logger = log.progress('Calculating hashes...') # temp solution
+
     start_time = time.time()
-    bruteforce_pass_lc(3, sha256sumhex('zzz'.encode()), 'alphabet_lc', logger) # type: ignore 
+    bruteforce_pass_lc(5, sha256sumhex('zzzzz'.encode()), 'alphabet_lc', logger) # type: ignore 
     end_time = time.time()
     total_time = end_time - start_time
     log.info(f'Time taken: {total_time}')
