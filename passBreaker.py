@@ -25,6 +25,16 @@ def bruteforce_pass_lc(max_length, hashe, mode, logger_inst):
                     return pass_candidate
         logger_inst.faliure('Did not find hash :( Try another mode!')
 
+def check_top1M(hashe, logger_inst):
+    with open('top1Mpass.txt', 'r') as top1m:
+        top1m = list(top1m.read().split('\n'))  
+    for pass_candidate in top1m:
+        current_hashe = sha256sumhex(pass_candidate.encode()) # type: ignore  
+        if current_hashe == hashe:
+            logger_inst.success('Found hash! Password is: ' + pass_candidate)
+            return pass_candidate
+    logger_inst.faliure('Did not find hash :( Try another mode!')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='passBraker.py', description='simple script displaying how easy it is to break weak passwords' )
     parser.add_argument('--no-env-check', help='check to allow running on env that does not support pwnlib term', action='store_true', dest='no_env_check')
@@ -37,7 +47,10 @@ if __name__ == '__main__':
     logger = log.progress('Calculating hashes...') # temp solution
 
     start_time = time.time()
-    bruteforce_pass_lc(5, sha256sumhex('zzzzz'.encode()), 'alphabet_lc', logger) # type: ignore 
+
+    # bruteforce_pass_lc(5, sha256sumhex('zzzzz'.encode()), 'alphabet_lc', logger) # type: ignore 
+    check_top1M(sha256sumhex('dupablada'.encode()), logger)
+
     end_time = time.time()
     total_time = end_time - start_time
     log.info(f'Time taken: {total_time}')
