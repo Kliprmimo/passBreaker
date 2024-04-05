@@ -26,8 +26,10 @@ int checker(FILE * file, unsigned
             for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
                 printf("%02x", hash[i]);
             }
-            usleep(100000);
             printf("\n");
+            fflush(stdout);
+            usleep(1000);
+
         }
         i++;
         int equal = 1;
@@ -45,6 +47,7 @@ int checker(FILE * file, unsigned
             }
 
             printf("\n");
+            fflush(stdout);
             return 0;
         }
     }
@@ -75,6 +78,6 @@ int main(int argc, char * argv[]) {
     double time_taken = ((double) t) / CLOCKS_PER_SEC;
     fclose(file);
 
-    printf("Hashing took %f seconds to execute \n", time_taken);
+    // printf("Hashing took %f seconds to execute \n", time_taken);
     return 0;
 }

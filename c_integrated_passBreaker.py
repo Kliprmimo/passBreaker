@@ -20,10 +20,11 @@ def check_env():
 
 def execute_hashing(filename, hashe, logger_inst):
 
-    process =  subprocess.Popen(['./hasher', filename, hashe], stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True, bufsize=1)
+    process =  subprocess.Popen(['./hasher', filename, hashe], stdout=subprocess.PIPE,stdin=subprocess.PIPE, stderr=subprocess.PIPE,text=True, bufsize=1, universal_newlines=True)
 
     while process.poll() is None:
         # stdout, stderr = process.communicate()
+
         output = process.stdout.readline()
         if output != '':
             logger_inst.status(output)
@@ -64,11 +65,10 @@ if __name__ == '__main__':
         check_env()
 
     log.info('Starting hashe checking')
-    # logger = log.progress('Current hashe')
     logger = log.progress('Calculating hashes...')  # temp solution
 
     start_time = time.time()
-    execute_hashing('top1Mpass.txt', '60a5d3e4100fe8afa5ee0103739a45711d50d7f3ba7280d8a95b51f5d04aa4b8', logger)
+    execute_hashing('top1Mpass.txt', '8d4e931ea8f6969639c27edf0631c86a45c5961e64897f7207563271b8bdb92e', logger)
     end_time = time.time()
 
     total_time = end_time - start_time
