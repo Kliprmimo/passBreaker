@@ -14,7 +14,7 @@ numbers = "0123456789"
 
 def check_env():
     if not term.can_init():
-        print('try using linux env, logging might not look great because pwnlib term could not be enabled ')
+        print('try using linux env, logging might not look great because pwnlib term could not be enabled or use --no-env-check option')
         exit()
 
 
@@ -55,10 +55,13 @@ def bruteforce_pass_lc(max_length, hashe, mode, logger_inst):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        prog='passBraker.py', description='simple script displaying how easy it is to break weak passwords')
-    parser.add_argument('--no-env-check', help='check to allow running on env that does not support pwnlib term',
-                        action='store_true', dest='no_env_check')
+    # options to add: bruteforce, capp generated wordlist, cap generated 1337 wordlist (cook), cooked wordlist from a list, cooked wordlist from a word, just wordlist 
+
+    parser = argparse.ArgumentParser(prog='passBraker.py', description='simple script displaying how easy it is to break weak passwords')
+    parser.add_argument('password/hashe', help='password or hashe to be bruteforced')
+    parser.add_argument('--no-env-check', help='check to allow running on env that does not support pwnlib term', action='store_true', dest='no_env_check')
+    parser.add_argument('--hashe', help='add hashe instead of password', action='store_true', dest='hashe_check')
+
     args = parser.parse_args()
 
     if not args.no_env_check:
