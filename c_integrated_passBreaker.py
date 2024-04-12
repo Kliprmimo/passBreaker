@@ -46,19 +46,11 @@ def bruteforce_pass_lc(max_length, hashe, mode, logger_inst):
                     return pass_candidate
         logger_inst.faliure('Did not find hash :( Try another mode!')
 
-
-# def check_top1M(hashe, logger_inst):
-
-
-#     logger_inst.success('Found hash! Password is: ' + pass_candidate)
-#     logger_inst.faliure('Did not find hash :( Try another mode!')
-
-
 if __name__ == '__main__':
-    # options to add: bruteforce, capp generated wordlist, cap generated 1337 wordlist (cook), cooked wordlist from a list, cooked wordlist from a word, just wordlist 
 
     parser = argparse.ArgumentParser(prog='passBraker.py', description='simple script displaying how easy it is to break weak passwords')
-    parser.add_argument('password/hashe', help='password or hashe to be bruteforced')
+    parser.add_argument('password_hashe', help='password or hashe to be bruteforced')
+    parser.add_argument('wordlist', help='file name to bruteforce')
     parser.add_argument('--no-env-check', help='check to allow running on env that does not support pwnlib term', action='store_true', dest='no_env_check')
     parser.add_argument('--hashe', help='add hashe instead of password', action='store_true', dest='hashe_check')
 
@@ -67,11 +59,16 @@ if __name__ == '__main__':
     if not args.no_env_check:
         check_env()
 
+    if not args.hashe_check:
+        hashe = sha256sumhex(args.password_hashe.encode())
+    else:
+        hashe = args.password_hashe
+
     log.info('Starting hashe checking')
     logger = log.progress('Calculating hashes...')  # temp solution
 
     start_time = time.time()
-    execute_hashing('top1Mpass.txt', '8d4e931ea8f6969639c27edf0631c86a45c5961e64897f7207563271b8bdb92e', logger)
+    execute_hashing(args.wordlist, hashe , logger)
     end_time = time.time()
 
     total_time = end_time - start_time
