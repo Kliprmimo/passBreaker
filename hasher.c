@@ -28,7 +28,7 @@ int checker(FILE * file, unsigned
             }
             printf("\n");
             fflush(stdout);
-            usleep(1000);
+//            usleep(1000);
 
         }
         i++;
@@ -41,12 +41,12 @@ int checker(FILE * file, unsigned
         }
 
         if (equal) {
-            printf("Hash of '%s' is: ", pass_candidate);
+            printf("%s ", pass_candidate);
             for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
                 printf("%02x", hash[i]);
             }
 
-            printf("\n");
+//            printf("\n");
             fflush(stdout);
             return 0;
         }
@@ -73,7 +73,9 @@ int main(int argc, char * argv[]) {
 
     clock_t t;
     t = clock();
-    checker(file, known_hash);
+    if (checker(file, known_hash) == -1){
+	return -1;
+}
     t = clock() - t;
     double time_taken = ((double) t) / CLOCKS_PER_SEC;
     fclose(file);
