@@ -20,7 +20,7 @@ def check_env():
 
 def execute_hashing(filename, hashe, logger_inst):
 
-    process =  subprocess.Popen(['./hasher', filename, hashe], stdout=subprocess.PIPE,stdin=subprocess.PIPE, stderr=subprocess.PIPE,text=True, bufsize=1, universal_newlines=True)
+    process =  subprocess.Popen(['./hasher', filename, hashe], stdout=subprocess.PIPE,stdin=subprocess.PIPE, stderr=subprocess.PIPE,text=True,  universal_newlines=True)
 
     while process.poll() is None:
         # stdout, stderr = process.communicate()
@@ -28,7 +28,12 @@ def execute_hashing(filename, hashe, logger_inst):
         output = process.stdout.readline()
         if output != '':
             logger_inst.status(output)
+            found = output
 
+    if process.poll() == 0:
+        logger_inst.success('Found hash! Password is: ' + found)
+    else:
+        logger_inst.failure('Could not find hash :((' )
     return output
 
 
@@ -44,7 +49,7 @@ def bruteforce_pass_lc(max_length, hashe, mode, logger_inst):
                     logger_inst.success(
                         'Found hash! Password is: ' + pass_candidate)
                     return pass_candidate
-        logger_inst.faliure('Did not find hash :( Try another mode!')
+        logger_inst.failure('Did not find hash :( Try another mode!')
 
 if __name__ == '__main__':
 
